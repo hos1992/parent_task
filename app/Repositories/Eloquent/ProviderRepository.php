@@ -3,35 +3,37 @@
 namespace App\Repositories\Eloquent;
 
 use App\Repositories\ProviderRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class ProviderRepository extends BaseRepository implements ProviderRepositoryInterface
 {
 
-    private $providers_config = [];
-    private $data_collection = [];
     const AUTHORISED_STATUS = 1;
-    const DECLINE_STATUS = 2;
-    const REFUNDED_STATUS = 3;
+    const DECLINE_STATUS    = 2;
+    const REFUNDED_STATUS   = 3;
+    private array $providers_config = [];
+    private array $data_collection  = [];
+
     /**
-     * List the providers data according the given data in the data array
+     * List the providers data according to the given data in the data array
      *
      * @param array $data
      * @return Collection
      */
-    function list(array $data) {
-
+    function list(array $data): Collection
+    {
         // get config
         $this->getProvidersConfig();
 
         if (empty($this->providers_config)) {
-            throw new Exception("There's no providers in the config file !");
+            throw new \Exception("There's no providers in the config file !");
         }
 
         // get providers data
         $this->getProvidersData();
 
         if (empty($this->data_collection)) {
-            throw new Exception("No users fetched !");
+            throw new \Exception("No users fetched !");
         }
 
         // return all or filtered users collection
@@ -49,7 +51,7 @@ class ProviderRepository extends BaseRepository implements ProviderRepositoryInt
         // path = storage/app/public
         $config = $this->readJsonFile(public_path('storage/providers_config.json'));
         foreach ($config as $val) {
-            array_push($this->providers_config, json_decode($val, true));
+            $this->providers_config[] = json_decode($val, true);
         }
     }
 
@@ -63,7 +65,7 @@ class ProviderRepository extends BaseRepository implements ProviderRepositoryInt
         foreach ($this->providers_config as $config) {
             $users = $this->readJsonFile(public_path("storage/{$config['file_name']}"));
             foreach ($users as $user) {
-                array_push($this->data_collection, $this->constructUserObject(json_decode($user, true), $config));
+                $this->data_collection[] = $this->constructUserObject(json_decode($user, true), $config);
             }
         }
     }
@@ -73,7 +75,7 @@ class ProviderRepository extends BaseRepository implements ProviderRepositoryInt
      *
      * @param array $user
      * @param array $config
-     * @return Array
+     * @return array
      */
     private function constructUserObject(array $user, array $config)
     {
@@ -82,7 +84,7 @@ class ProviderRepository extends BaseRepository implements ProviderRepositoryInt
             'balance' => $user[$config['amount_key']],
             'currency' => $user[$config['currency_key']],
             'parent_email' => $user[$config['parent_email_key']],
-            'registeration_date' => $user[$config['registeration_date_key']],
+            'registration_date' => $user[$config['registration_date_key']],
             'id' => $user[$config['id_key']],
         ];
 
@@ -105,14 +107,14 @@ class ProviderRepository extends BaseRepository implements ProviderRepositoryInt
      * Filter users according to request data
      *
      * @param array $data
-     * @return collection
+     * @return Collection
      */
-    private function filterUsers(array $data)
+    private function filterUsers(array $data): Collection
     {
         // create users collection
         $users = collect($this->data_collection);
 
-        // get usesrs by provider
+        // get users by provider
         if (isset($data['provider']) && !empty($data['provider'])) {
             $users = $users->where('provider', $data['provider']);
         }
