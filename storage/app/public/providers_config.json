@@ -1,0 +1,28 @@
+[
+    {
+        "file_name" : "provider_x.json",
+        "amount_key" : "parentAmount",
+        "currency_key" : "Currency",
+        "parent_email_key" : "parentEmail",
+        "registeration_date_key" : "registerationDate",
+        "id_key" : "parentIdentification",
+        "status_code_key" : "statusCode",
+        "status_authorised_val" : 1,
+        "status_decline_val" : 2,
+        "status_refunded_val" : 3,
+        "provider_name" : "DataProviderX"
+    },
+    {
+        "file_name" : "provider_y.json",
+        "amount_key" : "balance",
+        "currency_key" : "currency",
+        "parent_email_key" : "email",
+        "registeration_date_key" : "created_at",
+        "id_key" : "id",
+        "status_code_key" : "status",
+        "status_authorised_val" : 100,
+        "status_decline_val" : 200,
+        "status_refunded_val" : 300,
+        "provider_name" : "DataProviderY"
+    }
+]
