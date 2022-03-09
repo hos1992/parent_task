@@ -7,6 +7,7 @@ This project is created using laravel sail
 - Run sail up
 - The repository containing the logic =>  /App/Repositories/Eloquent/ProviderRepository.php
 - The json files is located at => storage/app/public
+- Api request docs => https://documenter.getpostman.com/view/2535192/UVsEV8nQ
 
 ## How it work
 
