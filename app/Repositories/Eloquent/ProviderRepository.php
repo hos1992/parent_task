@@ -80,25 +80,33 @@ class ProviderRepository extends BaseRepository implements ProviderRepositoryInt
     private function constructUserObject(array $user, array $config)
     {
         $userArr = [
-            'provider' => $config['provider_name'],
-            'balance' => $user[$config['amount_key']],
-            'currency' => $user[$config['currency_key']],
-            'parent_email' => $user[$config['parent_email_key']],
-            'registration_date' => $user[$config['registration_date_key']],
-            'id' => $user[$config['id_key']],
+            'provider' => $config['provider_name'] ?? 'NA',
+            'balance' => $user[$config['amount_key']] ?? 'NA',
+            'currency' => $user[$config['currency_key']] ?? 'NA',
+            'parent_email' => $user[$config['parent_email_key']] ?? 'NA',
+            'registration_date' => $user[$config['registration_date_key']] ?? 'NA',
+            'id' => $user[$config['id_key']] ?? 'NA',
         ];
 
-        switch ($user[$config['status_code_key']]) {
-            case $config['status_authorised_val']:
-                $userArr['status'] = SELF::AUTHORISED_STATUS;
-                break;
-            case $config['status_decline_val']:
-                $userArr['status'] = SELF::DECLINE_STATUS;
-                break;
-            case $config['status_refunded_val']:
-                $userArr['status'] = SELF::REFUNDED_STATUS;
-                break;
+        if(!$config['status_code_key']){
+            $userArr['status'] = "NA";
+        }else{
+            switch ($user[$config['status_code_key']]) {
+                case $config['status_authorised_val']:
+                    $userArr['status'] = SELF::AUTHORISED_STATUS;
+                    break;
+                case $config['status_decline_val']:
+                    $userArr['status'] = SELF::DECLINE_STATUS;
+                    break;
+                case $config['status_refunded_val']:
+                    $userArr['status'] = SELF::REFUNDED_STATUS;
+                    break;
+                default :
+                    $userArr['status'] = "NA";
+            }
         }
+
+
         return $userArr;
 
     }
